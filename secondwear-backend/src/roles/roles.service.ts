@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
 
 @Injectable()
-export class RolesService {
+export class RolesService implements OnModuleInit {
   constructor(
     @InjectRepository(Role)
     private rolesRepository: Repository<Role>,
-  ) {}
+  ) { }
+
+  async onModuleInit() {
+    await this.createIfNotExists('user');
+    await this.createIfNotExists('admin');
+    console.log("Roles seeded: user, admin");
+  }
 
   async create(name: string): Promise<Role> {
     const role = this.rolesRepository.create({ name });
