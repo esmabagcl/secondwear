@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from '../api/axios'; // Axios instance import edildi
 
 function Login() {
   const navigate = useNavigate();
@@ -13,34 +14,17 @@ function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+      // Artık localhost yerine VITE_API_URL kullanan api instance'ı kullanılıyor
+      const response = await api.post("/auth/login", {
+        email: email,
+        password: password,
       });
 
-      if (!response.ok) {
-        throw new Error("Email veya şifre hatalı");
-      }
+      // Axios response.data içinde veriyi döner
+      const data = response.data;
 
-      const data = await response.json();
-
-      
       localStorage.setItem("token", data.token);
-      
-      
-      
-      
-      
 
-      
-      
-      
       if (data.role) {
         localStorage.setItem("role", data.role);
         console.log("Rol kaydedildi:", data.role);
@@ -61,7 +45,9 @@ function Login() {
         navigate("/");
       }
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      const message = err.response?.data?.message || err.message || "Giriş başarısız";
+      setError(message);
     }
   };
 

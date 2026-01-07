@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import api from '../api/axios'; // Centralized api import
 
 const Register = () => {
   const navigate = useNavigate();
@@ -9,12 +9,6 @@ const Register = () => {
     email: "",
     password: "",
     role: "user",
-  });
-
-
-  const api = axios.create({
-    baseURL: 'http://localhost:3000',
-    headers: { 'Content-Type': 'application/json' },
   });
 
   const handleSubmit = async (e) => {
@@ -27,12 +21,10 @@ const Register = () => {
     }
 
     try {
-
-
       const response = await api.post("/auth/register", formData);
 
       if (response.status === 201 || response.status === 200) {
-        alert("Kayıt Başarılı!");
+        alert("Kayıt Başarılı! Şimdi giriş yapabilirsiniz.");
         navigate("/login");
       }
     } catch (error) {
