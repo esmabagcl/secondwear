@@ -52,6 +52,7 @@ function ProductDetail() {
             }
         } catch (error) {
             console.error("Favori işlemi hatası:", error);
+            alert("Favori işlemi başarısız: " + (error.response?.data?.message || error.message));
         }
     };
 

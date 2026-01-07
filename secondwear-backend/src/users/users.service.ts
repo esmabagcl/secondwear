@@ -37,31 +37,26 @@ export class UsersService {
   }
 
   async addFavorite(userId: number, clothingId: number) {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
-      relations: ['favorites'],
-    });
-
-    const clothing = await this.clothingRepository.findOne({ where: { id: clothingId } });
-
-    if (user && clothing) {
-      if (!user.favorites.find(f => f.id === clothing.id)) {
-        user.favorites.push(clothing);
-        await this.usersRepository.save(user);
-      }
+    try {
+      await this.usersRepository
+        .createQueryBuilder()
+        .relation(User, 'favorites')
+        .of(userId)
+        .add(clothingId);
+    } catch (error) {
+      // Duplicate insert hatasını yut (zaten favorideyse sorun yok)
+      // Postgres error code 23505 (unique_violation)
+      // Ancak loglamak iyidir
+      console.log('Favori ekleme uyarısı (zaten ekli olabilir):', error.message);
     }
   }
 
   async removeFavorite(userId: number, clothingId: number) {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
-      relations: ['favorites'],
-    });
-
-    if (user) {
-      user.favorites = user.favorites.filter(f => f.id !== clothingId);
-      await this.usersRepository.save(user);
-    }
+    await this.usersRepository
+      .createQueryBuilder()
+      .relation(User, 'favorites')
+      .of(userId)
+      .remove(clothingId);
   }
 
   async findProfileById(id: number) {

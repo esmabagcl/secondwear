@@ -34,6 +34,23 @@ function UserPage() {
 
   if (loading) return <p style={{ textAlign: 'center' }}>Yükleniyor...</p>;
 
+  if (!userData) {
+    return (
+      <div className="text-center p-10">
+        <p className="text-red-500 mb-4">Kullanıcı bilgileri alınamadı.</p>
+        <button
+          onClick={() => {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+          }}
+          className="bg-indigo-600 text-white px-4 py-2 rounded"
+        >
+          Tekrar Giriş Yap
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <header className="bg-slate-50 p-8 rounded-3xl mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -45,7 +62,7 @@ function UserPage() {
 
       <section>
         {userData?.favorites?.length > 0 ? (
-          <div className="grid md:grid-grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {userData.favorites.map(item => (
               <div key={item.id} className="flex gap-4 border border-slate-200 p-4 rounded-xl bg-white items-center">
                 {item.imageUrl && <img src={getImageUrl(item.imageUrl)} className="w-16 h-16 rounded-lg object-cover bg-slate-100" />}
