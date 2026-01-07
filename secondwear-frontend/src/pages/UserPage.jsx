@@ -16,15 +16,18 @@ function UserPage() {
   const fetchData = async () => {
     try {
       const userRes = await api.get('/users/profile');
+      if (!userRes.data) {
+        throw new Error("Kullanıcı verisi boş döndü (Veritabanı silinmiş olabilir)");
+      }
       setUserData(userRes.data);
     } catch (err) {
       console.error("Veriler alınırken hata oluştu:", err);
       // Detaylı hata bilgisini sakla
       setErrorInfo({
         message: err.message,
-        status: err.response?.status,
-        apiUrl: api.defaults.baseURL, // Axios base URL'ini gör
-        detail: JSON.stringify(err.response?.data || {})
+        status: err.response?.status || "200 (Veri Yok)",
+        apiUrl: api.defaults.baseURL,
+        detail: JSON.stringify(err.response?.data || "Sunucu boş yanıt döndü")
       });
     } finally {
       setLoading(false);

@@ -35,7 +35,12 @@ function CartPage() {
             navigate('/user-dashboard');
         } catch (error) {
             console.error("Sipariş hatası:", error);
-            alert("Sipariş oluşturulurken bir hata oluştu.");
+            const devMessage = error.response?.data?.message || error.message;
+            if (error.response?.status === 404) {
+                alert("Hata: " + devMessage + "\n\n(Lütfen çıkış yapıp tekrar üye olun/giriş yapın)");
+            } else {
+                alert("Sipariş oluşturulurken bir hata oluştu: " + devMessage);
+            }
         } finally {
             setLoading(false);
         }
