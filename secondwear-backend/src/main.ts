@@ -8,16 +8,18 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  
+
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   });
 
-  
+
   app.enableCors();
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.listen(3000);
+  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log("DEPLOYMENT VERSION: FINAL FIX 2.0");
 }
 bootstrap();
