@@ -8,12 +8,12 @@ export class RolesService implements OnModuleInit {
   constructor(
     @InjectRepository(Role)
     private rolesRepository: Repository<Role>,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.createIfNotExists('user');
     await this.createIfNotExists('admin');
-    console.log("Roles seeded: user, admin");
+    console.log('Roles seeded: user, admin');
   }
 
   async create(name: string): Promise<Role> {

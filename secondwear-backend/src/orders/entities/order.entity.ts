@@ -4,12 +4,12 @@ import { OrderItem } from './order-item.entity';
 
 @Entity()
 export class Order {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => User, (user) => user.id)
-    buyer: User;
+  @ManyToOne(() => User, (user) => user.id)
+  buyer: User;
 
-    @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
-    items: OrderItem[];
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
+  items: OrderItem[];
 }

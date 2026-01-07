@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { Clothing } from '../clothing/entities/clothing.entity';
 import * as bcrypt from 'bcrypt';
@@ -12,15 +13,16 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(Clothing)
     private clothingRepository: Repository<Clothing>,
-  ) { }
+  ) {}
 
-  async create(userData: any) {
+  async create(userData: CreateUserDto) {
     const salt = await bcrypt.genSalt(10);
+
     const hashedPassword = await bcrypt.hash(userData.password, salt);
 
     const newUser = this.usersRepository.create({
       ...userData,
-      password: hashedPassword
+      password: hashedPassword,
     });
     return this.usersRepository.save(newUser);
   }
@@ -32,24 +34,27 @@ export class UsersService {
   async findOne(id: number) {
     return this.usersRepository.findOne({
       where: { id },
-      relations: ['role']
+      relations: ['role'],
     });
   }
 
   async addFavorite(userId: number, clothingId: number) {
     try {
       // Önce kullanıcının varlığını kontrol et (Ghost User sorunu için)
-      const user = await this.usersRepository.findOne({ where: { id: userId } });
-      if (!user) throw new Error("Kullanıcı bulunamadı (Oturum geçersiz)");
+      const user = await this.usersRepository.findOne({
+        where: { id: userId },
+      });
+      if (!user) throw new Error('Kullanıcı bulunamadı (Oturum geçersiz)');
 
       await this.usersRepository
         .createQueryBuilder()
         .relation(User, 'favorites')
         .of(userId)
         .add(clothingId);
-    } catch (error) {
+    } catch (error: any) {
       // Sadece 'duplicate key' hatasını yut (23505)
       // Diğer hataları fırlat ki frontend anlasın
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.code === '23505') {
         return;
       }
@@ -70,8 +75,8 @@ export class UsersService {
       where: { id },
       relations: ['role', 'favorites'],
       order: {
-        id: 'DESC'
-      }
+        id: 'DESC',
+      },
     });
 
     return user;
@@ -80,13 +85,19 @@ export class UsersService {
   async findProfile(email: string) {
     return this.usersRepository.findOne({
       where: { email },
-      relations: ['role', 'favorites', 'orders', 'orders.items', 'orders.items.clothing']
+      relations: [
+        'role',
+        'favorites',
+        'orders',
+        'orders.items',
+        'orders.items.clothing',
+      ],
     });
   }
   async findByEmail(email: string) {
     return this.usersRepository.findOne({
       where: { email },
-      relations: ['role']
+      relations: ['role'],
     });
   }
 }

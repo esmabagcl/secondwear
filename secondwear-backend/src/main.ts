@@ -8,11 +8,9 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   });
-
 
   app.enableCors();
 
@@ -20,6 +18,9 @@ async function bootstrap() {
 
   await app.listen(3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
-  console.log("DEPLOYMENT VERSION: FINAL FIX 2.0");
+  console.log('DEPLOYMENT VERSION: FINAL FIX 2.0');
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

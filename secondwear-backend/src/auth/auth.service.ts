@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RolesService } from '../roles/roles.service';
 import { JwtService } from '@nestjs/jwt';
@@ -10,7 +14,7 @@ export class AuthService {
     private usersService: UsersService,
     private rolesService: RolesService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async login(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
@@ -36,7 +40,12 @@ export class AuthService {
     };
   }
 
-  async register(email: string, password: string, name: string, roleName: string = 'user') {
+  async register(
+    email: string,
+    password: string,
+    name: string,
+    roleName: string = 'user',
+  ) {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException('Bu email zaten kayıtlı');
@@ -47,7 +56,7 @@ export class AuthService {
       throw new BadRequestException(`Sistemde "${roleName}" rolü bulunamadı.`);
     }
 
-    const newUser: any = await this.usersService.create({
+    const newUser = await this.usersService.create({
       email,
       password,
       name,

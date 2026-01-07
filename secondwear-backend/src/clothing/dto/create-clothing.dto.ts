@@ -1,4 +1,10 @@
-import { IsString, IsNumber, MinLength, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  MinLength,
+  IsNotEmpty,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateClothingDto {
@@ -15,7 +21,7 @@ export class CreateClothingDto {
   @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
-  categoryId: number; 
+  categoryId: number;
 
   @IsOptional()
   imageUrl?: string;

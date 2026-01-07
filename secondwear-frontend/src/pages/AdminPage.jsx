@@ -10,11 +10,6 @@ function AdminPage() {
   const [imgFile, setImgFile] = useState(null);
   const [editId, setEditId] = useState(null);
 
-  useEffect(() => {
-    fetchItems();
-    fetchCategories();
-  }, []);
-
   const fetchItems = async () => {
     try {
       const res = await api.get('/clothing');
@@ -35,6 +30,12 @@ function AdminPage() {
       console.error("Kategoriler yüklenirken hata:", error);
     }
   };
+
+  useEffect(() => {
+    fetchItems();
+    fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleEditClick = (item) => {
     setEditId(item.id);

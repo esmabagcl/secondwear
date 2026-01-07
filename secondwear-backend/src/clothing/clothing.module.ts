@@ -7,13 +7,13 @@ import { Category } from '../categories/entities/category.entity';
 import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Clothing, Category]),
-        MulterModule.register({
-            dest: './uploads',
-        }),
-    ],
-    controllers: [ClothingController],
-    providers: [ClothingService],
+  imports: [
+    TypeOrmModule.forFeature([Clothing, Category]),
+    MulterModule.register({
+      dest: './uploads',
+    }),
+  ],
+  controllers: [ClothingController],
+  providers: [ClothingService],
 })
-export class ClothingModule { }
+export class ClothingModule {}

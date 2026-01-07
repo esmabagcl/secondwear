@@ -1,12 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import type { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -17,7 +28,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Request() req: AuthenticatedRequest) {
     return this.usersService.findProfileById(req.user.userId);
   }
 
@@ -28,16 +39,21 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  
   @Post('favorites/:clothingId')
   @UseGuards(JwtAuthGuard)
-  addFavorite(@Request() req, @Param('clothingId', ParseIntPipe) clothingId: number) {
+  addFavorite(
+    @Request() req: AuthenticatedRequest,
+    @Param('clothingId', ParseIntPipe) clothingId: number,
+  ) {
     return this.usersService.addFavorite(req.user.userId, clothingId);
   }
 
   @Delete('favorites/:clothingId')
   @UseGuards(JwtAuthGuard)
-  removeFavorite(@Request() req, @Param('clothingId', ParseIntPipe) clothingId: number) {
+  removeFavorite(
+    @Request() req: AuthenticatedRequest,
+    @Param('clothingId', ParseIntPipe) clothingId: number,
+  ) {
     return this.usersService.removeFavorite(req.user.userId, clothingId);
   }
 }

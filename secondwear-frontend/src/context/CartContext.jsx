@@ -2,27 +2,23 @@ import { createContext, useState, useEffect, useContext } from 'react';
 
 const CartContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-
-    
-    useEffect(() => {
+    const [cartItems, setCartItems] = useState(() => {
         const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            setCartItems(JSON.parse(savedCart));
-        }
-    }, []);
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
-    
+
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
     const addToCart = (product) => {
         setCartItems(prev => {
-            
+
             if (prev.find(item => item.id === product.id)) {
                 alert("Bu ürün zaten sepetinizde!");
                 return prev;

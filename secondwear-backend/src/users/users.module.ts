@@ -11,4 +11,4 @@ import { Clothing } from '../clothing/entities/clothing.entity';
   controllers: [UsersController],
   exports: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}

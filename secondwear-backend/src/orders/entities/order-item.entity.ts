@@ -4,12 +4,12 @@ import { Clothing } from '../../clothing/entities/clothing.entity';
 
 @Entity()
 export class OrderItem {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Order, (order) => order.items)
-    order: Order;
+  @ManyToOne(() => Order, (order) => order.items)
+  order: Order;
 
-    @ManyToOne(() => Clothing)
-    clothing: Clothing;
+  @ManyToOne(() => Clothing)
+  clothing: Clothing;
 }

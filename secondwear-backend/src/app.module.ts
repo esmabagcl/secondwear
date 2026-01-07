@@ -12,8 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { ClothingModule } from './clothing/clothing.module';
 import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
-
-
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -34,6 +33,7 @@ import { OrdersModule } from './orders/orders.module';
     ClothingModule,
     CategoriesModule,
     OrdersModule,
+    RolesModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
