@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api/axios";
 import { useCart } from "../context/CartContext";
+import { getImageUrl } from "../utils/imageObj";
 
 function ProductDetail() {
     const { id } = useParams();
@@ -9,7 +10,7 @@ function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const { addToCart } = useCart();
 
-    
+    // Favori durumu
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ function ProductDetail() {
                 const res = await api.get(`/clothing/${id}`);
                 setProduct(res.data);
 
-                
+                // Kullanıcı giriş yapmışsa favori kontrolü
                 const token = localStorage.getItem('token');
                 if (token) {
                     const userRes = await api.get('/users/profile');
@@ -62,10 +63,10 @@ function ProductDetail() {
             <Link to="/" className="text-indigo-600 hover:underline mb-6 inline-block">← Geri Dön</Link>
 
             <div className="grid md:grid-cols-2 gap-12">
-                {}
+                {/* Sol Taraf - Resim */}
                 <div className="bg-slate-100 rounded-3xl overflow-hidden shadow-lg relative">
                     <img
-                        src={product.imageUrl || "https://via.placeholder.com/600"}
+                        src={getImageUrl(product.imageUrl)}
                         alt={product.name}
                         className="w-full h-full object-cover max-h-[600px]"
                     />
@@ -77,7 +78,7 @@ function ProductDetail() {
                     </button>
                 </div>
 
-                {}
+                {/* Sağ Taraf - Detaylar */}
                 <div className="space-y-6">
                     <div>
                         <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">

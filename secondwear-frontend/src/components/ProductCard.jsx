@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../utils/imageObj";
 
 function ProductCard({ product }) {
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden">
       <img
-        src={product.imageUrl || product.image || "https://via.placeholder.com/300"}
+        src={getImageUrl(product.imageUrl || product.image)}
         alt={product.name}
         className="w-full h-72 object-cover"
       />

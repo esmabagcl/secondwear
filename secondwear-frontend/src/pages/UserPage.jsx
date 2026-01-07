@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from "../utils/imageObj";
 
 function UserPage() {
   const [userData, setUserData] = useState(null);
@@ -25,7 +26,7 @@ function UserPage() {
     if (!window.confirm("Favorilerden çıkarmak istediğinize emin misiniz?")) return;
     try {
       await api.delete(`/users/favorites/${id}`);
-      fetchData(); 
+      fetchData();
     } catch (error) {
       console.error("Hata:", error);
     }
@@ -44,10 +45,10 @@ function UserPage() {
 
       <section>
         {userData?.favorites?.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-grid-cols-2 gap-4">
             {userData.favorites.map(item => (
               <div key={item.id} className="flex gap-4 border border-slate-200 p-4 rounded-xl bg-white items-center">
-                {item.imageUrl && <img src={item.imageUrl} className="w-16 h-16 rounded-lg object-cover bg-slate-100" />}
+                {item.imageUrl && <img src={getImageUrl(item.imageUrl)} className="w-16 h-16 rounded-lg object-cover bg-slate-100" />}
                 <div className="flex-1">
                   <Link to={`/products/${item.id}`} className="font-bold text-slate-800 hover:underline">{item.name}</Link>
                   <p className="text-indigo-600 font-bold">{item.price} TL</p>

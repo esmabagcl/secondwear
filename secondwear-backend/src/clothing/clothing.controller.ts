@@ -37,12 +37,12 @@ export class ClothingController {
   }))
   create(@Body() createClothingDto: CreateClothingDto, @UploadedFile() file: Express.Multer.File) {
     if (file) {
-      
-      createClothingDto.imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+
+      createClothingDto.imageUrl = `/uploads/${file.filename}`;
     }
 
-    
-    
+
+
 
     return this.clothingService.create(createClothingDto);
   }
@@ -62,7 +62,7 @@ export class ClothingController {
   }))
   update(@Param('id') id: string, @Body() updateClothingDto: any, @UploadedFile() file: Express.Multer.File) {
     if (file) {
-      updateClothingDto.imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+      updateClothingDto.imageUrl = `/uploads/${file.filename}`;
     }
 
 

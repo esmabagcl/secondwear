@@ -2,6 +2,7 @@ import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useState } from 'react';
+import { getImageUrl } from "../utils/imageObj";
 
 function CartPage() {
     const { cartItems, removeFromCart, clearCart } = useCart();
@@ -55,11 +56,11 @@ function CartPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
 
-                {}
+                { }
                 <div className="md:col-span-2 space-y-4">
                     {cartItems.map(item => (
                         <div key={item.id} className="flex gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100 items-center">
-                            <img src={item.imageUrl || "https://via.placeholder.com/100"} alt={item.name} className="w-20 h-20 object-cover rounded-lg bg-slate-200" />
+                            <img src={getImageUrl(item.imageUrl)} alt={item.name} className="w-20 h-20 object-cover rounded-lg bg-slate-200" />
                             <div className="flex-1">
                                 <h3 className="font-bold text-slate-800">{item.name}</h3>
                                 <p className="text-sm text-slate-500">{item.category?.name || "Kategori Yok"}</p>
@@ -77,7 +78,7 @@ function CartPage() {
                     ))}
                 </div>
 
-                {}
+                { }
                 <div className="h-fit bg-slate-50 p-6 rounded-2xl border border-slate-200">
                     <h3 className="font-bold text-lg mb-4 text-slate-700">Sipariş Özeti</h3>
 

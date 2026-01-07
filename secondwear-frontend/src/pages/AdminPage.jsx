@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
+import { getImageUrl } from "../utils/imageObj";
 
 function AdminPage() {
   const [items, setItems] = useState([]);
@@ -112,9 +113,9 @@ function AdminPage() {
     <div className="p-8 bg-slate-50 min-h-screen">
       <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-8">
 
-        {}
+        { }
         <div className="space-y-8">
-          {}
+          { }
           <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
             <h2 className="text-xl font-bold mb-6">Kategori Ekle</h2>
             <form className="space-y-4" onSubmit={handleCategorySubmit}>
@@ -138,7 +139,7 @@ function AdminPage() {
           </div>
         </div>
 
-        {}
+        { }
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 h-fit">
           <h2 className="text-xl font-bold mb-6">{editId ? "Ürünü Düzenle" : "Ürün Ekle"}</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -191,7 +192,7 @@ function AdminPage() {
           </form>
         </div>
 
-        {}
+        { }
         <div className="lg:col-span-3 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden h-fit">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 border-b border-slate-200">
@@ -206,7 +207,7 @@ function AdminPage() {
               {items.map(i => (
                 <tr key={i.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-semibold text-slate-700 flex items-center gap-3">
-                    {i.imageUrl && <img src={i.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover bg-slate-200" />}
+                    {i.imageUrl && <img src={getImageUrl(i.imageUrl)} alt="" className="w-10 h-10 rounded-lg object-cover bg-slate-200" />}
                     {i.name}
                   </td>
                   <td className="px-6 py-4 text-slate-500">{i.category?.name || '-'}</td>
