@@ -11,12 +11,21 @@ function UserPage() {
     fetchData();
   }, []);
 
+  const [errorInfo, setErrorInfo] = useState(null);
+
   const fetchData = async () => {
     try {
       const userRes = await api.get('/users/profile');
       setUserData(userRes.data);
     } catch (err) {
       console.error("Veriler alınırken hata oluştu:", err);
+      // Detaylı hata bilgisini sakla
+      setErrorInfo({
+        message: err.message,
+        status: err.response?.status,
+        apiUrl: api.defaults.baseURL, // Axios base URL'ini gör
+        detail: JSON.stringify(err.response?.data || {})
+      });
     } finally {
       setLoading(false);
     }
@@ -36,16 +45,27 @@ function UserPage() {
 
   if (!userData) {
     return (
-      <div className="text-center p-10">
-        <p className="text-red-500 mb-4">Kullanıcı bilgileri alınamadı.</p>
+      <div className="text-center p-10 max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold text-red-600 mb-4">Bir Hata Oluştu 😔</h2>
+        <p className="text-slate-700 mb-6">Kullanıcı bilgileri alınamadı.</p>
+
+        {errorInfo && (
+          <div className="bg-slate-100 p-4 rounded text-left text-xs font-mono mb-6 overflow-auto border border-red-200">
+            <p><strong>Hata Mesajı:</strong> {errorInfo.message}</p>
+            <p><strong>Hata Kodu:</strong> {errorInfo.status}</p>
+            <p><strong>Bağlanılan API:</strong> {errorInfo.apiUrl}</p>
+            <p><strong>Detay:</strong> {errorInfo.detail}</p>
+          </div>
+        )}
+
         <button
           onClick={() => {
             localStorage.removeItem('token');
             window.location.href = '/login';
           }}
-          className="bg-indigo-600 text-white px-4 py-2 rounded"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition"
         >
-          Tekrar Giriş Yap
+          Çıkış Yap ve Tekrar Dene
         </button>
       </div>
     );
