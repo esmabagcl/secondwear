@@ -38,16 +38,22 @@ export class UsersService {
 
   async addFavorite(userId: number, clothingId: number) {
     try {
+      // Önce kullanıcının varlığını kontrol et (Ghost User sorunu için)
+      const user = await this.usersRepository.findOne({ where: { id: userId } });
+      if (!user) throw new Error("Kullanıcı bulunamadı (Oturum geçersiz)");
+
       await this.usersRepository
         .createQueryBuilder()
         .relation(User, 'favorites')
         .of(userId)
         .add(clothingId);
     } catch (error) {
-      // Duplicate insert hatasını yut (zaten favorideyse sorun yok)
-      // Postgres error code 23505 (unique_violation)
-      // Ancak loglamak iyidir
-      console.log('Favori ekleme uyarısı (zaten ekli olabilir):', error.message);
+      // Sadece 'duplicate key' hatasını yut (23505)
+      // Diğer hataları fırlat ki frontend anlasın
+      if (error.code === '23505') {
+        return;
+      }
+      throw error;
     }
   }
 
